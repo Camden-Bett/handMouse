@@ -28,12 +28,13 @@ while True:
         # Grab first (only) set of hand landmarks
         lm = results.multi_hand_landmarks[0]
 
-        # Isolate index fingertip
-        tip = lm.landmark[mp.solutions.hands.HandLandmark.INDEX_FINGER_TIP]
+        # Isolate index fingertip and middle fingertip
+        iftip = lm.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+        mftip = lm.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
 
         # Get coords
-        tip_x, tip_y, tip_z = tip.x, tip.y, tip.z
+        iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
 
-        print(f"X: {tip_x} | Y: {tip_y} | Z: {tip_z}")
+        print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
 
 
