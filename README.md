@@ -8,7 +8,7 @@
 Interpreter:
 * Python 3.9
 
-## Packages:
+Packages:
 * opencv-python
 * mediapipe
 
