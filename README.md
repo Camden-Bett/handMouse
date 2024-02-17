@@ -1,18 +1,18 @@
-## AI Hand Tracking Mouse
-# Authors
+# AI Hand Tracking Mouse
+## Authors
 * Camden Bettencourt (`@Camden-Bett`)
 * Nathan VanSickle (`@nathan-vansickle`)
 * Aidan Limle (`@ALimle`)
 
-# Requirements
+## Requirements
 Interpreter:
 * Python 3.9
 
-Packages:
+## Packages:
 * opencv-python
 * mediapipe
 
-# Project Roadmap
+## Project Roadmap
 - [ ] Launch camera
 - [ ] Capture frame
 - [ ] Convert to RGB
