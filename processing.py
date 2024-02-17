@@ -2,12 +2,15 @@ import mediapipe as mp
 import cv2
 import threading
 import keyboard
+import pyautogui
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 # environment variables
 wCam, hCam = 640, 480
+screenX, screenY = pyautogui.size() # dimensions of screen
+# debug show resolution print(f"screen dimensions: {screenX}x{screenY}")
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
@@ -30,6 +33,7 @@ def frameAnalysis():
         success, img = cap.read()
 
         # display a window of the current webcam footage each frame
+        img = cv2.flip(img, 1)
         cv2.imshow("Image", img)
         cv2.waitKey(1)
 
@@ -50,7 +54,14 @@ def frameAnalysis():
             # Get coords
             iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
 
-            print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+        # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+
+        # Move mouse cursor to current fingertip position
+        fingerX = screenX * iftip_x
+        fingerY = screenY * iftip_y
+        # debug show fingertip coordinates by screen resolution 
+        # print(f"X: {fingerX} | Y: {fingerY}")
+        pyautogui.moveTo(fingerX, fingerY)
 
 framethread = threading.Thread(target=frameAnalysis)
 framethread.start()
