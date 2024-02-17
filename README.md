@@ -6,7 +6,7 @@
 
 ## Requirements
 Interpreter:
-* Python 3.9
+* Python 3.7
 
 Packages:
 * opencv-python
