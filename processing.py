@@ -1,5 +1,7 @@
 import mediapipe as mp
 import cv2
+import threading
+import keyboard
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -11,30 +13,51 @@ cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
 
-while True:
-    success, img = cap.read()
+stopProgram = False
 
-    # display a window of the current webcam footage each frame
-    cv2.imshow("Image", img)
-    cv2.waitKey(1)
+# Key Listener thread
+def keyListener():
+    global stopProgram
+    
+    keyboard.wait("q")
+    stopProgram = True
 
-    hands = mp_hands.Hands()
+keythread = threading.Thread(target=keyListener)
+keythread.start()
 
-    rgbFrame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+def frameAnalysis():
+    while not stopProgram:
+        success, img = cap.read()
 
-    results = hands.process(rgbFrame)
+        # display a window of the current webcam footage each frame
+        cv2.imshow("Image", img)
+        cv2.waitKey(1)
 
-    if results.multi_hand_landmarks:
-        # Grab first (only) set of hand landmarks
-        lm = results.multi_hand_landmarks[0]
+        hands = mp_hands.Hands()
 
-        # Isolate index fingertip and middle fingertip
-        iftip = lm.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-        mftip = lm.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+        rgbFrame = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        # Get coords
-        iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
+        results = hands.process(rgbFrame)
 
-        print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+        if results.multi_hand_landmarks:
+            # Grab first (only) set of hand landmarks
+            lm = results.multi_hand_landmarks[0]
+
+            # Isolate index fingertip and middle fingertip
+            iftip = lm.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+            mftip = lm.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+
+            # Get coords
+            iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
+
+            print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+
+framethread = threading.Thread(target=frameAnalysis)
+framethread.start()
+
+keythread.join()
+framethread.join()
+
+cv2.destroyAllWindows()
 
 
