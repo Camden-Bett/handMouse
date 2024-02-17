@@ -11,6 +11,7 @@ Interpreter:
 Packages:
 * opencv-python
 * mediapipe
+* pyautogui
 
 ## Project Roadmap
 - [ ] Launch camera
