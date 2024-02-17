@@ -14,10 +14,13 @@ Packages:
 * pyautogui
 
 ## Project Roadmap
-- [ ] Launch camera
-- [ ] Capture frame
-- [ ] Convert to RGB
-- [ ] Pass into Mediapipe
-- [ ] Find finger
-- [ ] Derive coordinates
+- [X] Launch camera
+- [X] Capture frame
+- [X] Convert to RGB
+- [X] Pass into Mediapipe
+- [X] Find finger
+- [X] Derive coordinates
 - [ ] Update mouse position
+- [ ] Click gesture
+- [ ] Quit gesture
+- [ ] More...
