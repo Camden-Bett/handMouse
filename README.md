@@ -20,7 +20,7 @@ Packages:
 - [X] Pass into Mediapipe
 - [X] Find finger
 - [X] Derive coordinates
-- [ ] Update mouse position
+- [X] Update mouse position
 - [ ] Click gesture
 - [ ] Quit gesture
 - [ ] More...
