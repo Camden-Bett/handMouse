@@ -18,6 +18,7 @@ while True:
     success, img = cap.read()
 
     # display a window of the current webcam footage each frame
+    img = cv2.flip(img, 1)
     cv2.imshow("Image", img)
     cv2.waitKey(1)
 
@@ -41,7 +42,7 @@ while True:
         # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
 
         # Move mouse cursor to current fingertip position
-        fingerX = screenX * (1 - iftip_x)
+        fingerX = screenX * iftip_x
         fingerY = screenY * iftip_y
         # debug show fingertip coordinates by screen resolution 
         # print(f"X: {fingerX} | Y: {fingerY}")
