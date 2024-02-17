@@ -1,11 +1,14 @@
 import mediapipe as mp
 import cv2
+import pyautogui
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 # environment variables
 wCam, hCam = 640, 480
+screenX, screenY = pyautogui.size() # dimensions of screen
+# debug show resolution print(f"screen dimensions: {screenX}x{screenY}")
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
@@ -35,6 +38,13 @@ while True:
         # Get coords
         iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
 
-        print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+        # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+
+        # Move mouse cursor to current fingertip position
+        fingerX = screenX * (1 - iftip_x)
+        fingerY = screenY * iftip_y
+        # debug show fingertip coordinates by screen resolution 
+        # print(f"X: {fingerX} | Y: {fingerY}")
+        pyautogui.moveTo(fingerX, fingerY)
 
 
