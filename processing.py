@@ -54,14 +54,14 @@ def frameAnalysis():
             # Get coords
             iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
 
-        # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
-
-        # Move mouse cursor to current fingertip position
-        fingerX = screenX * iftip_x
-        fingerY = screenY * iftip_y
-        # debug show fingertip coordinates by screen resolution 
-        # print(f"X: {fingerX} | Y: {fingerY}")
-        pyautogui.moveTo(fingerX, fingerY)
+            # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+            
+            # Move mouse cursor to current fingertip position
+            fingerX = screenX * iftip_x
+            fingerY = screenY * iftip_y
+            # debug show fingertip coordinates by screen resolution 
+            # print(f"X: {fingerX} | Y: {fingerY}")
+            pyautogui.moveTo(fingerX, fingerY)
 
 framethread = threading.Thread(target=frameAnalysis)
 framethread.start()
