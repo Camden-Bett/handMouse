@@ -15,6 +15,7 @@ mp_hands = mp.solutions.hands
 wCam, hCam = 640, 480
 screenX, screenY = pyautogui.size() # dimensions of screen
 # debug show resolution print(f"screen dimensions: {screenX}x{screenY}")
+clickThreshold = 0.05 # threshold for click gesture
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
@@ -49,18 +50,14 @@ def frameAnalysis():
             # Grab first (only) set of hand landmarks
             lm = results.multi_hand_landmarks[0]
 
-            # Isolate index, middle, and pinky fingertips
+            # Isolate index fingertip and middle fingertip
+            ttip = lm.landmark[mp_hands.HandLandmark.THUMB_TIP]
             iftip = lm.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             mftip = lm.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
-            ptip = lm.landmark[mp_hands.HandLandmark.PINKY_TIP]
-            ttip = lm.landmark[mp_hands.HandLandmark.THUMB_TIP]
             rftip = lm.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
-
-            # Get coords
-            iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
+            ptip = lm.landmark[mp_hands.HandLandmark.PINKY_TIP]
 
             # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
-
             cv2.circle(img, (int(ptip.x * img.shape[1]), int(ptip.y * img.shape[0])), 5, (0, 255, 0), -1)
             cv2.circle(img, (int(iftip_x * img.shape[1]), int(iftip_y * img.shape[0])), 5, (255, 0, 0), -1)
             cv2.circle(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), 5, (0, 0, 255), -1)
@@ -79,6 +76,19 @@ def frameAnalysis():
             # debug show fingertip coordinates by screen resolution 
             # print(f"X: {fingerX} | Y: {fingerY}")
             pyautogui.moveTo(fingerX, fingerY)
+
+            # calculate distance from each finger to the thumb
+            leftDistance = ((iftip.x - ttip.x)**2 + (iftip.y - ttip.y)**2)**0.5
+            rightDistance = ((mftip.x - ttip.x)**2 + (mftip.y - ttip.y)**2)**0.5
+            quitDistance = ((rftip.x - ttip.x)**2 + (rftip.y - ttip.y)**2)**0.5
+
+            # click if finger is touching thumb
+            if leftDistance < clickThreshold:
+                pyautogui.leftClick()
+            elif rightDistance < clickThreshold:
+                pyautogui.rightClick()
+            elif quitDistance < clickThreshold:
+                print("quit")
 
 framethread = threading.Thread(target=frameAnalysis)
 framethread.start()
