@@ -13,9 +13,10 @@ mp_hands = mp.solutions.hands
 
 # environment variables
 wCam, hCam = 640, 480
-screenX, screenY = pyautogui.size() # dimensions of screen
+screenX, screenY = tuple(element/2 for element in pyautogui.size()) # center of screen
 # debug show resolution print(f"screen dimensions: {screenX}x{screenY}")
 clickThreshold = 0.05 # threshold for click gesture
+sensitivity = 3.2 # controls how fast mouse moves
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
@@ -59,7 +60,7 @@ def frameAnalysis():
 
             # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
             cv2.circle(img, (int(ptip.x * img.shape[1]), int(ptip.y * img.shape[0])), 5, (0, 255, 0), -1)
-            cv2.circle(img, (int(iftip_x * img.shape[1]), int(iftip_y * img.shape[0])), 5, (255, 0, 0), -1)
+            cv2.circle(img, (int(iftip.x * img.shape[1]), int(iftip.y * img.shape[0])), 5, (255, 0, 0), -1)
             cv2.circle(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), 5, (0, 0, 255), -1)
             cv2.circle(img, (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), 5, (255, 255, 255), -1)
             cv2.circle(img, (int(rftip.x * img.shape[1]), int(rftip.y * img.shape[0])), 5, (255, 165, 0), -1)
@@ -71,8 +72,17 @@ def frameAnalysis():
             cv2.waitKey(1)
 
             # Move mouse cursor to current fingertip position
-            fingerX = screenX * ptip.x
-            fingerY = screenY * ptip.y
+            fingerX = screenX + screenX * (ptip.x - 0.5) * sensitivity
+            fingerY = screenY + screenY * (ptip.y - 0.5) * sensitivity
+
+            # Pad mouse cursor to edges
+            screenUpper = screenY * 2
+            screenRight = screenX * 2
+            fingerX = fingerX if fingerX > 3 else 3
+            fingerY = fingerY if fingerY > 3 else 3
+            fingerX = fingerX if fingerX < screenRight - 3 else screenRight - 3
+            fingerY = fingerY if fingerY < screenUpper - 3 else screenUpper - 3
+
             # debug show fingertip coordinates by screen resolution 
             # print(f"X: {fingerX} | Y: {fingerY}")
             pyautogui.moveTo(fingerX, fingerY)
