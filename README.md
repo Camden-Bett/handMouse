@@ -6,7 +6,7 @@
 
 ## Requirements
 Interpreter:
-* Python 3.7
+* Python 3.9
 
 Packages:
 * opencv-python
@@ -23,4 +23,4 @@ Packages:
 - [X] Update mouse position
 - [X] Click gesture
 - [X] Quit gesture
-- [ ] Optimizations
+- [X] Optimizations
