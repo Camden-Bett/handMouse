@@ -24,17 +24,8 @@ cap.set(4, hCam)
 
 stopProgram = False
 
-# Key Listener thread
-def keyListener():
-    global stopProgram
-    
-    keyboard.wait("q")
-    stopProgram = True
-
-keythread = threading.Thread(target=keyListener)
-keythread.start()
-
 def frameAnalysis():
+    global stopProgram
     while not stopProgram:
         success, img = cap.read()
 
@@ -67,6 +58,7 @@ def frameAnalysis():
 
             cv2.line(img, (int(iftip.x * img.shape[1]), int(iftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
             cv2.line(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
+            cv2.line(img, (int(rftip.x * img.shape[1]), int(rftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 0, 255), 5)
 
             cv2.imshow("Image", img)
             cv2.waitKey(1)
@@ -98,12 +90,8 @@ def frameAnalysis():
             elif rightDistance < clickThreshold:
                 pyautogui.rightClick()
             elif quitDistance < clickThreshold:
-                print("quit")
+                stopProgram = True
 
-framethread = threading.Thread(target=frameAnalysis)
-framethread.start()
-
-keythread.join()
-framethread.join()
+frameAnalysis()
 
 cv2.destroyAllWindows()
