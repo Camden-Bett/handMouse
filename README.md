@@ -21,6 +21,6 @@ Packages:
 - [X] Find finger
 - [X] Derive coordinates
 - [X] Update mouse position
-- [ ] Click gesture
-- [ ] Quit gesture
-- [ ] More...
+- [X] Click gesture
+- [X] Quit gesture
+- [ ] Optimizations
