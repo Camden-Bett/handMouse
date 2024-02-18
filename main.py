@@ -4,8 +4,6 @@
 # place necessary imports here
 import mediapipe as mp
 import cv2
-import threading
-import keyboard
 import pyautogui
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
