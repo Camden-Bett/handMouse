@@ -34,8 +34,6 @@ def frameAnalysis():
 
         # display a window of the current webcam footage each frame
         img = cv2.flip(img, 1)
-        cv2.imshow("Image", img)
-        cv2.waitKey(1)
 
         hands = mp_hands.Hands()
 
@@ -47,18 +45,33 @@ def frameAnalysis():
             # Grab first (only) set of hand landmarks
             lm = results.multi_hand_landmarks[0]
 
-            # Isolate index fingertip and middle fingertip
+            # Isolate index, middle, and pinky fingertips
             iftip = lm.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             mftip = lm.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+            ptip = lm.landmark[mp_hands.HandLandmark.PINKY_TIP]
+            ttip = lm.landmark[mp_hands.HandLandmark.THUMB_TIP]
+            rftip = lm.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
 
             # Get coords
             iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
 
             # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
-            
+
+            cv2.circle(img, (int(ptip.x * img.shape[1]), int(ptip.y * img.shape[0])), 5, (0, 255, 0), -1)
+            cv2.circle(img, (int(iftip_x * img.shape[1]), int(iftip_y * img.shape[0])), 5, (255, 0, 0), -1)
+            cv2.circle(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), 5, (0, 0, 255), -1)
+            cv2.circle(img, (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), 5, (255, 255, 255), -1)
+            cv2.circle(img, (int(rftip.x * img.shape[1]), int(rftip.y * img.shape[0])), 5, (255, 165, 0), -1)
+
+            cv2.line(img, (int(iftip.x * img.shape[1]), int(iftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
+            cv2.line(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
+
+            cv2.imshow("Image", img)
+            cv2.waitKey(1)
+
             # Move mouse cursor to current fingertip position
-            fingerX = screenX * iftip_x
-            fingerY = screenY * iftip_y
+            fingerX = screenX * ptip.x
+            fingerY = screenY * ptip.y
             # debug show fingertip coordinates by screen resolution 
             # print(f"X: {fingerX} | Y: {fingerY}")
             pyautogui.moveTo(fingerX, fingerY)
