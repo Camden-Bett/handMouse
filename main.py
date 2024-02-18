@@ -58,26 +58,19 @@ def frameAnalysis():
             rftip = lm.landmark[mp_hands.HandLandmark.RING_FINGER_TIP]
             ptip = lm.landmark[mp_hands.HandLandmark.PINKY_TIP]
 
-            # Get coords
-            ttip_x, ttip_y = ttip.x, ttip.y
-            iftip_x, iftip_y, iftip_z = iftip.x, iftip.y, iftip.z
-            mftip_x, mftip_y = mftip.x, mftip.y
-            rftip_x, rftip_y = rftip.x, rftip.y
-            ptip_x, ptip_y = ptip.x, ptip.y
-
             # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
 
             # Move mouse cursor to current fingertip position
-            fingerX = screenX * ptip_x
-            fingerY = screenY * ptip_y
+            fingerX = screenX * ptip.x
+            fingerY = screenY * ptip.y
             # debug show fingertip coordinates by screen resolution 
             # print(f"X: {fingerX} | Y: {fingerY}")
             pyautogui.moveTo(fingerX, fingerY)
 
             # calculate distance from each finger to the thumb
-            leftDistance = ((iftip_x - ttip_x)**2 + (iftip_y - ttip_y)**2)**0.5
-            rightDistance = ((mftip_x - ttip_x)**2 + (mftip_y - ttip_y)**2)**0.5
-            quitDistance = ((rftip_x - ttip_x)**2 + (rftip_y - ttip_y)**2)**0.5
+            leftDistance = ((iftip.x - ttip.x)**2 + (iftip.y - ttip.y)**2)**0.5
+            rightDistance = ((mftip.x - ttip.x)**2 + (mftip.y - ttip.y)**2)**0.5
+            quitDistance = ((rftip.x - ttip.x)**2 + (rftip.y - ttip.y)**2)**0.5
 
             # click if finger is touching thumb
             if leftDistance < clickThreshold:
