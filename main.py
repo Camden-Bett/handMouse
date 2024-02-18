@@ -1,6 +1,7 @@
 # AI Virtual Mouse Project
 # Camden Bettencourt, Nathan VanSickle, and Aidan Limle
 
+# place necessary imports here
 import mediapipe as mp
 import cv2
 import threading
@@ -38,8 +39,6 @@ def frameAnalysis():
 
         # display a window of the current webcam footage each frame
         img = cv2.flip(img, 1)
-        cv2.imshow("Image", img)
-        cv2.waitKey(1)
 
         hands = mp_hands.Hands()
 
@@ -59,6 +58,17 @@ def frameAnalysis():
             ptip = lm.landmark[mp_hands.HandLandmark.PINKY_TIP]
 
             # debug show fingertip coordinates relative position print(f"X: {iftip_x} | Y: {iftip_y} | Z: {iftip_z}")
+            cv2.circle(img, (int(ptip.x * img.shape[1]), int(ptip.y * img.shape[0])), 5, (0, 255, 0), -1)
+            cv2.circle(img, (int(iftip_x * img.shape[1]), int(iftip_y * img.shape[0])), 5, (255, 0, 0), -1)
+            cv2.circle(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), 5, (0, 0, 255), -1)
+            cv2.circle(img, (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), 5, (255, 255, 255), -1)
+            cv2.circle(img, (int(rftip.x * img.shape[1]), int(rftip.y * img.shape[0])), 5, (255, 165, 0), -1)
+
+            cv2.line(img, (int(iftip.x * img.shape[1]), int(iftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
+            cv2.line(img, (int(mftip.x * img.shape[1]), int(mftip.y * img.shape[0])), (int(ttip.x * img.shape[1]), int(ttip.y * img.shape[0])), (0, 255, 0), 5)
+
+            cv2.imshow("Image", img)
+            cv2.waitKey(1)
 
             # Move mouse cursor to current fingertip position
             fingerX = screenX * ptip.x
